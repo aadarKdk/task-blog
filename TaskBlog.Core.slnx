@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TaskBlog.API/TaskBlog.API.csproj" />
+    <Project Path="src/TaskBlog.Application/TaskBlog.Application.csproj" />
+    <Project Path="src/TaskBlog.Domain/TaskBlog.Domain.csproj" />
+    <Project Path="src/TaskBlog.Infrastructure/TaskBlog.Infrastructure.csproj" />
+  </Folder>
+</Solution>
