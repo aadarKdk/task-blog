@@ -1,2 +1,2 @@
 # TaskBlog.Core
-TaskBlog.Core is minimum 
+TaskBlog.Core is a simple project.
