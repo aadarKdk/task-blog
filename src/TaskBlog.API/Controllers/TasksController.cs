@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using TaskBlog.Application.DTOs;
 using TaskBlog.Application.Interfaces;
-using TaskBlog.Domain.Entities;
 
 namespace TaskBlog.API.Controllers;
 
@@ -28,23 +27,34 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTaskById(Guid id, TaskItem task)
+    public async Task<IActionResult> GetTaskById(Guid id)
     {
-        await _taskService.GetTaskByIdAsync(id);
+        var task = await _taskService.GetTaskByIdAsync(id);
+
+        if (task == null)
+            return NotFound();
+
         return Ok(task);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] TaskItem task)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
     {
-        var createdTask = await _taskService.CreateTaskAsync(task);
-        return CreatedAtAction(nameof(GetAllTasks), new { id = createdTask.Id }, createdTask);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var created = await _taskService.CreateTaskAsync(dto);
+
+        return CreatedAtAction(nameof(GetTaskById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskItem task)
+    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskDto dto)
     {
-        await _taskService.UpdateTaskAsync(id, task);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        await _taskService.UpdateTaskAsync(id, dto);
         return NoContent();
     }
 
