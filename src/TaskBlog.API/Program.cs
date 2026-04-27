@@ -18,6 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
