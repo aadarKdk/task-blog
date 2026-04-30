@@ -11,10 +11,14 @@ using TaskBlog.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- Database Configuration ---
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("Database connection string is not configured.");
+}
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -63,6 +67,13 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<JwtService>();
 
 // --- Authentication & Authorization ---
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new Exception("JWT Key is not configured. Set Jwt__Key environment variable.");
+}
+
 builder
     .Services.AddAuthentication("Bearer")
     .AddJwtBearer(
@@ -75,9 +86,7 @@ builder
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
-                ),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             };
         }
     );
@@ -102,8 +111,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 
