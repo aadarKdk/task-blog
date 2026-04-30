@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskBlog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Auth</h2>
+
+<input id="username" placeholder="username" />
+<input id="password" type="password" placeholder="password" />
+
+<br>
+
+<button onclick="registerUser()">Register</button>
+<button onclick="loginUser()">Login</button>
+<button onclick="logoutUser()">Logout</button>
+
+<hr>
+
+<h2>Tasks</h2>
+
+<input id="taskTitle" placeholder="title" />
+<input id="taskDesc" placeholder="description" />
+
+<br>
+
+<button onclick="createTaskUI()">Create Task</button>
+<button onclick="loadTasksUI()">Load Tasks</button>
+
+<div id="tasks"></div>
+
+<hr>
+
+<h2>Posts</h2>
+
+<input id="postTitle" placeholder="title" />
+<input id="postContent" placeholder="content" />
+
+<br>
+
+<button onclick="createPostUI()">Create Post</button>
+<button onclick="loadPostsUI()">Load Posts</button>
+
+<div id="posts"></div>
+
+<script src="api.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
